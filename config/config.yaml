@@ -7,20 +7,20 @@ default_container: "docker://hydragenetics/common:0.0.1"
 trimmer_software: "fastp"
 
 reference:
-  background: "/projects/wp1/nobackup/ngs/utveckling/Twist_DNA_DATA/PoN/hydra_test/background_panel.tsv"
-  artifacts: "/projects/wp1/nobackup/ngs/utveckling/Twist_DNA_DATA/PoN/hydra_test/artifact_panel.tsv"
-  fasta: "/data/ref_genomes/hg19/bwa/BWA_0.7.10_refseq/hg19.with.mt.fasta"
-  dict: "/data/ref_genomes/hg19/bwa/BWA_0.7.10_refseq/hg19.with.mt.dict"
-  amb: "/data/ref_genomes/hg19/bwa/BWA_0.7.10_refseq/hg19.with.mt.amb"
-  ann: "/data/ref_genomes/hg19/bwa/BWA_0.7.10_refseq/hg19.with.mt.ann"
-  bwt: "/data/ref_genomes/hg19/bwa/BWA_0.7.10_refseq/hg19.with.mt.bwt"
-  fai: "/data/ref_genomes/hg19/bwa/BWA_0.7.10_refseq/hg19.with.mt.fai"
-  pac: "/data/ref_genomes/hg19/bwa/BWA_0.7.10_refseq/hg19.with.mt.pac"
-  sa: "/data/ref_genomes/hg19/bwa/BWA_0.7.10_refseq/hg19.with.mt.sa"
-  design_bed: "/projects/wp1/nobackup/ngs/utveckling/Twist_DNA_DATA/bed/pool1_pool2_nochr_3c.sort.merged.padded20.hg19.210311.met.annotated.bed"
-  design_intervals: "/projects/wp1/nobackup/ngs/utveckling/Twist_DNA_DATA/bed/pool1_pool2_nochr_3c.sort.merged.padded20.hg19.210311.met.annotated.interval_list"
-  design_intervals_gatk_cnv: "/projects/wp1/nobackup/ngs/utveckling/Twist_DNA_DATA/bed/pool1_pool2_nochr_3c.sort.merged.padded20.hg19.210311.met.annotated.bed.preprocessed.interval_list"
-  hotspots: "/projects/wp1/nobackup/ngs/utveckling/Twist_DNA_DATA/bed/Hotspots_combined.csv"
+  background: "/apps/bio/dependencies/twist_dna/PoN/background_panel_UU_normal.tsv"
+  artifacts: "/apps/bio/dependencies/twist_dna/PoN/artifact_panel_UU_normal.tsv"
+  fasta: "/medstore/External_References/hs37d5/hs37d5.fa"
+  dict: "/medstore/External_References/hs37d5/hs37d5.dict"
+  amb: "/medstore/External_References/hs37d5/hs37d5.fa.amb"
+  ann: "/medstore/External_References/hs37d5/hs37d5.fa.ann"
+  bwt: "/medstore/External_References/hs37d5/hs37d5.fa.bwt"
+  fai: "/medstore/External_References/hs37d5/hs37d5.fa.fai"
+  pac: "/medstore/External_References/hs37d5/hs37d5.fa.pac"
+  sa: "/medstore/External_References/hs37d5/hs37d5.fa.sa"
+  design_bed: "/apps/bio/dependencies/twist_dna/design/pool1_pool2_nochr_3c.sort.merged.padded20.hg19.210311.met.annotated.bed"
+  design_intervals: "/apps/bio/dependencies/twist_dna/design/pool1_pool2_nochr_3c.sort.merged.padded20.hg19.210311.met.annotated.interval_list"
+  design_intervals_gatk_cnv: "/apps/bio/dependencies/twist_dna/design/pool1_pool2_nochr_3c.sort.merged.padded20.hg19.210311.met.annotated.bed.preprocessed.interval_list"
+  hotspots: "/apps/bio/dependencies/twist_dna/hotspots/Hotspots_combined.csv"
   skip_chrs:
     - "chrM"
 
@@ -180,7 +180,7 @@ svdb_merge:
 
 multiqc:
   container: "docker://hydragenetics/multiqc:1.11"
-  config: "/projects/wp1/nobackup/ngs/utveckling/Twist_DNA_DATA/multiqc_config.yaml"
+  config: "/apps/bio/dependencies/twist_dna/config/multiqc_config.yaml"
   qc_files:
     - "qc/picard_hs_metrics/{sample}_{type}.HsMetrics.txt"
     - "qc/picard_alignment_summary_metrics/{sample}_{type}.alignment_summary_metrics.txt"
