@@ -9,7 +9,7 @@ singularity-args: "-e --bind /medstore --bind /seqstore --bind /apps"
 rerun-incomplete: True
 restart-times: 1
 latency-wait: 60
-#jobname: "{cluster.name}_{jobid}"
+jobname: "hydra.{name}.{jobid}"
 #drmaa: " -V -q {resources.queue} -pe mpi {resources.threads} -l excl=1" --latency-wait 60 --cleanenv --use-singularity --singularity-prefix=/apps/bio/dependencies/hydra_genetics/singularities --singularity-args "-e --bind /medstore --bind /seqstore --bind /apps "
 #drmaa: " -A wp1 -N 1-1 -t {resources.time} -n {resources.threads} --mem={resources.mem_mb} --mem-per-cpu={resources.mem_per_cpu} --mem-per-cpu={resources.mem_per_cpu} --partition={resources.partition}"
 default-resources: [queue="test.q", threads=1]
