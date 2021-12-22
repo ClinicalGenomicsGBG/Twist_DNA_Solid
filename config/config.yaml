@@ -7,8 +7,8 @@ default_container: "docker://hydragenetics/common:0.0.1"
 trimmer_software: "fastp"
 
 reference:
-  background: "/apps/bio/dependencies/twist_dna/PoN/background_panel_UU_normal.tsv"
-  artifacts: "/apps/bio/dependencies/twist_dna/PoN/artifact_panel_UU_normal.tsv"
+  background: "/apps/bio/dependencies/hydra_genetics/PoN/background_panel_UU_normal.tsv"
+  artifacts: "/apps/bio/dependencies/hydra_genetics/PoN/artifact_panel_UU_normal.tsv"
   fasta: "/medstore/External_References/hs37d5/hs37d5.fa"
   dict: "/medstore/External_References/hs37d5/hs37d5.dict"
   amb: "/medstore/External_References/hs37d5/hs37d5.fa.amb"
@@ -17,10 +17,10 @@ reference:
   fai: "/medstore/External_References/hs37d5/hs37d5.fa.fai"
   pac: "/medstore/External_References/hs37d5/hs37d5.fa.pac"
   sa: "/medstore/External_References/hs37d5/hs37d5.fa.sa"
-  design_bed: "/apps/bio/dependencies/twist_dna/design/pool1_pool2_nochr_3c.sort.merged.padded20.hg19.210311.met.annotated.bed"
-  design_intervals: "/apps/bio/dependencies/twist_dna/design/pool1_pool2_nochr_3c.sort.merged.padded20.hg19.210311.met.annotated.interval_list"
-  design_intervals_gatk_cnv: "/apps/bio/dependencies/twist_dna/design/pool1_pool2_nochr_3c.sort.merged.padded20.hg19.210311.met.annotated.bed.preprocessed.interval_list"
-  hotspots: "/apps/bio/dependencies/twist_dna/hotspots/Hotspots_combined.csv"
+  design_bed: "/apps/bio/dependencies/hydra_genetics/design/pool1_pool2_nochr_3c.sort.merged.padded20.hg19.210311.met.annotated.bed"
+  design_intervals: "/apps/bio/dependencies/hydra_genetics/design/pool1_pool2_nochr_3c.sort.merged.padded20.hg19.210311.met.annotated.interval_list"
+  design_intervals_gatk_cnv: "/apps/bio/dependencies/hydra_genetics/design/pool1_pool2_nochr_3c.sort.merged.padded20.hg19.210311.met.annotated.bed.preprocessed.interval_list"
+  hotspots: "/apps/bio/dependencies/hydra_genetics/hotspots/Hotspots_combined.csv"
   skip_chrs:
     - "chrM"
 
@@ -91,7 +91,7 @@ bed_split:
 
 vep:
   container: "docker://ensemblorg/ensembl-vep:release_99.0"
-  vep_cache:  "/apps/bio/dependencies/twist_dna/Twist_DNA_pipeline/VEP"
+  vep_cache:  "/apps/bio/dependencies/hydra_genetics/VEP"
   mode: --offline --cache
   extra: " --check_existing --pick --sift b --polyphen b --ccds --uniprot --hgvs --symbol --numbers --domains --regulatory --canonical --protein --biotype --uniprot --tsl --appris --gene_phenotype --af --af_1kg --af_gnomad --max_af --pubmed --variant_class "
 
@@ -127,7 +127,7 @@ hotspot_info:
 
 msisensor_pro:
   container: "docker://hydragenetics/msisensor_pro:1.1.a"
-  PoN: "/apps/bio/dependencies/twist_dna/PoN/Msisensor_pro_reference_UU_normal.list_baseline"
+  PoN: "/apps/bio/dependencies/hydra_genetics/PoN/Msisensor_pro_reference_UU_normal.list_baseline"
 
 tmb:
   container: "docker://hydragenetics/common:0.0.1"
@@ -137,11 +137,11 @@ hrd:
 
 gene_fuse:
   container: "docker://hydragenetics/genefuse:0.6.1"
-  genes: "/apps/bio/repos/Twist_DNA/DATA/druggable.hg19.csv"
+  genes: "/apps/bio/dependencies/hydra_genetics/DATA/druggable.hg19.csv"
 
 cnvkit_call:
   container: "docker://gmsuppsala/somatic:develop"
-  normal_reference: "/apps/bio/dependencies/twist_dna/PoN/cnvkit_UU_normal.PoN.cnn"
+  normal_reference: "/apps/bio/dependencies/hydra_genetics/PoN/cnvkit_UU_normal.PoN.cnn"
 
 cnvkit_call_loh:
   container: "docker://gmsuppsala/somatic:develop"
@@ -157,11 +157,11 @@ gatk_cnv_collect_read_counts:
 
 gatk_cnv_denoise_read_counts:
   container: "docker://gmsuppsala/somatic:develop"
-  normal_reference: "/apps/bio/dependencies/twist_dna/PoN/gatk_cnv_UU_normal.hdf5"
+  normal_reference: "/apps/bio/dependencies/hydra_genetics/PoN/gatk_cnv_UU_normal.hdf5"
 
 gatk_cnv_collect_allelic_counts:
   container: "docker://gmsuppsala/somatic:develop"
-  SNP_interval: "/apps/bio/repos/Twist_DNA/DATA/gnomad_SNP_0.001_target.annotated.interval_list"
+  SNP_interval: "/apps/bio/dependencies/hydra_genetics/DATA/gnomad_SNP_0.001_target.annotated.interval_list"
 
 gatk_cnv_model_segments:
   container: "docker://gmsuppsala/somatic:develop"
@@ -180,7 +180,7 @@ svdb_merge:
 
 multiqc:
   container: "docker://hydragenetics/multiqc:1.11"
-  config: "/apps/bio/dependencies/twist_dna/config/multiqc_config.yaml"
+  config: "/apps/bio/dependencies/hydra_genetics/config/multiqc_config.yaml"
   qc_files:
     - "qc/picard_hs_metrics/{sample}_{type}.HsMetrics.txt"
     - "qc/picard_alignment_summary_metrics/{sample}_{type}.alignment_summary_metrics.txt"
