@@ -19,10 +19,14 @@ fastqc:
   threads: 10
 
 mutect2_gvcf:
+  threads: 4
   time: "8:00:00"
+  mem_mb: 8192
 
 mutect2:
+  threads: 4
   time: "8:00:00"
+  mem_mb: 8192
 
 gene_fuse:
   threads: 4
