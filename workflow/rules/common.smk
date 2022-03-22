@@ -45,152 +45,98 @@ wildcard_constraints:
     unit="N|T|R",
 
 
-def compile_output_list(wildcards: snakemake.io.Wildcards):
-    output_files = [
-        "results/dna/bam/%s_%s.bam" % (sample, type)
-        for sample in get_samples(samples)
-        for type in get_unit_types(units, sample)
+
+def compile_result_file_list():
+    files = [
+        {"in": ["alignment/merge_bam", ".bam"], "out": ["results/dna/bam", ".bam"]},
+        {"in": ["alignment/merge_bam", ".bam.bai"], "out": ["results/dna/bam", ".bam.bai"]},
+        {"in": ["snv_indels/ensemble_vcf", ".ensembled.vcf.gz"], "out": ["results/dna/vcf", ".ensembled.vcf.gz"]},
+        {
+            "in": ["snv_indels/ensemble_vcf", ".ensembled.vep_annotated.vcf"],
+            "out": ["results/dna/vcf", ".ensembled.vep_annotated.vcf"]
+        },
+        {
+            "in": ["filtering/add_multi_snv_in_codon", ".codon_snvs.sorted.vcf.gz"],
+            "out": ["results/dna/vcf", ".ensembled.vep_annotated.filtered.codon_snvs.vcf.gz"]
+        },
+        {
+            "in": ["filtering/add_multi_snv_in_codon", ".codon_snvs.sorted.include.nocnv.vcf.gz"],
+            "out": ["results/dna/vcf", ".ensembled.vep_annotated.filtered.codon_snvs.nocnv.vcf.gz"]
+        },
+        {
+            "in": ["filtering/add_multi_snv_in_codon", ".codon_snvs.sorted.include.exon.vcf.gz"],
+            "out": ["results/dna/vcf", ".ensembled.vep_annotated.filtered.codon_snvs.exon_only.vcf.gz"]
+        },
+        {"in": ["snv_indels/mutect2_gvcf", ".merged.gvcf.gz"], "out": ["results/dna/gvcf", ".gvcf.gz"]},
+        {
+            "in": ["qc/picard_collect_duplication_metrics", ".duplication_metrics.txt"],
+            "out": ["results/dna/qc", ".duplication_metrics.txt"]
+        },
+        {
+            "in": ["qc/picard_collect_alignment_summary_metrics", ".alignment_summary_metrics.txt"],
+            "out": ["results/dna/qc", ".alignment_summary_metrics.txt"]
+        },
+        {"in": ["qc/picard_collect_hs_metrics", ".HsMetrics.txt"], "out": ["results/dna/qc", ".HsMetrics.txt"]},
+        {
+            "in": ["qc/picard_collect_insert_size_metrics", ".insert_size_metrics.txt"],
+            "out": ["results/dna/qc", ".insert_size_metrics.txt"]
+        },
+        {"in": ["qc/samtools_stats", ".samtools-stats.txt"], "out": ["results/dna/qc", ".samtools-stats.txt"]},
+        {"in": ["qc/add_mosdepth_coverage_to_gvcf", ".mosdepth.gvcf.gz"], "out": ["results/dna/qc", ".mosdepth.gvcf.gz"]},
+        {"in": ["qc/hotspot_report", ".output.tsv"], "out": ["results/dna/qc", ".hotspot.tsv"]},
+        {"in": ["biomarker/msisensor_pro", ""], "out": ["results/dna/msi", ".msisensor_pro.score.tsv"]},
+        {"in": ["biomarker/tmb", ".TMB.txt"], "out": ["results/dna/tmb", ".TMB.txt"]},
+        {"in": ["biomarker/hrd", ".hrd_score.txt"], "out": ["results/dna/hrd", ".hrd_score.txt"]},
+        {"in": ["fusions/gene_fuse", "_gene_fuse_fusions.txt"], "out": ["results/dna/fusions", "_gene_fuse_fusions.txt"]},
+        {"in": ["cnv_sv/cnvkit_call", ".loh.cns"], "out": ["results/dna/cnv", ".cnvkit.loh.cns"]},
+        {"in": ["cnv_sv/gatk_cnv_call_copy_ratio_segments", ".clean.calledCNVs.seg"], "out": ["results/dna/cnv", ".gatk_cnv.seg"]},
+        {"in": ["cnv_sv/gatk_cnv_vcf", ".vcf"], "out": ["results/dna/cnv", ".gatk_cnv.vcf"]},
+        {"in": ["cnv_sv/cnvkit_vcf", ".vcf"], "out": ["results/dna/cnv", ".cnvkit.vcf"]},
+        {"in": ["cnv_sv/svdb_merge", ".merged.vcf"], "out": ["results/dna/cnv", ".merged.vcf"]},
     ]
-    output_files.append(
-        [
-            "results/dna/vcf/%s_%s_%s.vcf.gz" % (caller, sample, t)
-            for caller in ["mutect2", "vardict"]
-            for sample in get_samples(samples)
-            for t in get_unit_types(units, sample)
-        ]
-    )
-    output_files.append(
-        [
-            "results/dna/vcf/%s_%s.ensembled.vcf.gz" % (sample, t)
-            for sample in get_samples(samples)
-            for t in get_unit_types(units, sample)
-        ]
-    )
-    output_files.append(
-        [
-            "results/dna/gvcf/%s_%s.gvcf.gz" % (sample, t)
-            for sample in get_samples(samples)
-            for t in get_unit_types(units, sample)
-        ]
-    )
-    output_files.append(
-        [
-            "results/dna/vcf/%s_%s.ensembled.vep_annotated.vcf" % (sample, t)
-            for sample in get_samples(samples)
-            for t in get_unit_types(units, sample)
-        ]
-    )
-    output_files.append(
-        [
-            "results/dna/vcf/%s_%s.ensembled.vep_annotated.filtered.codon_snvs.vcf.gz" % (sample, t)
-            for sample in get_samples(samples)
-            for t in get_unit_types(units, sample)
-        ]
-    )
-    output_files.append(
-        [
-            "results/dna/qc/%s_%s_%s_fastqc.html" % (sample, t, read)
-            for read in ["fastq1", "fastq2"]
-            for sample in get_samples(samples)
-            for t in get_unit_types(units, sample)
-        ]
-    )
-    output_files.append(
-        [
-            "results/dna/qc/%s_%s.duplication_metrics.txt" % (sample, t)
-            for sample in get_samples(samples)
-            for t in get_unit_types(units, sample)
-        ]
-    )
-    output_files.append(
-        [
-            "results/dna/qc/%s_%s.alignment_summary_metrics.txt" % (sample, t)
-            for sample in get_samples(samples)
-            for t in get_unit_types(units, sample)
-        ]
-    )
-    output_files.append(
-        [
-            "results/dna/qc/%s_%s.HsMetrics.txt" % (sample, t)
-            for sample in get_samples(samples)
-            for t in get_unit_types(units, sample)
-        ]
-    )
-    output_files.append(
-        [
-            "results/dna/qc/%s_%s.insert_size_metrics.txt" % (sample, t)
-            for sample in get_samples(samples)
-            for t in get_unit_types(units, sample)
-        ]
-    )
-    output_files.append(
-        [
-            "results/dna/qc/%s_%s.samtools-stats.txt" % (sample, t)
-            for sample in get_samples(samples)
-            for t in get_unit_types(units, sample)
-        ]
-    )
-    output_files.append(
-        [
-            "results/dna/hotspot_info/%s_%s.hotspot_info.tsv" % (sample, t)
-            for sample in get_samples(samples)
-            for t in get_unit_types(units, sample)
-        ]
-    )
-    output_files.append(
-        [
-            "results/dna/msi/%s_%s.msisensor_pro.tsv" % (sample, t)
-            for sample in get_samples(samples)
-            for t in get_unit_types(units, sample)
-        ]
-    )
-    output_files.append(
-        [
-            "results/dna/tmb/%s_%s.TMB.txt" % (sample, t)
-            for sample in get_samples(samples)
-            for t in get_unit_types(units, sample)
-        ]
-    )
-    output_files.append(
-        [
-            "results/dna/hrd/%s_%s.hrd_score.txt" % (sample, t)
-            for sample in get_samples(samples)
-            for t in get_unit_types(units, sample)
-        ]
-    )
-    output_files.append(
-        [
-            "results/dna/fusions/%s_%s_gene_fuse_fusions.txt" % (sample, t)
-            for sample in get_samples(samples)
-            for t in get_unit_types(units, sample)
-        ]
-    )
-    output_files.append(
-        [
-            "results/dna/cnv/%s_%s.cnvkit_loh.cns" % (sample, t)
-            for sample in get_samples(samples)
-            for t in get_unit_types(units, sample)
-        ]
-    )
-    output_files.append(
-        [
-            "results/dna/cnv/%s_%s.gatk_cnv.seg" % (sample, t)
-            for sample in get_samples(samples)
-            for t in get_unit_types(units, sample)
-        ]
-    )
-    output_files.append(
-        ["results/dna/cnv/%s_%s.gatk_cnv.vcf" % (sample, t) for sample in get_samples(samples) for t in get_unit_types(units, sample)]
-    )
-    output_files.append(
-        ["results/dna/cnv/%s_%s.cnvkit.vcf" % (sample, t) for sample in get_samples(samples) for t in get_unit_types(units, sample)]
-    )
-    output_files.append(
-        [
-            "results/dna/cnv/%s_%s.merged.vcf" % (sample, t)
-            for sample in get_samples(samples)
-            for t in get_unit_types(units, sample)
-        ]
-    )
+    output_files = [
+        "%s/%s_%s%s" % (file_info["out"][0], sample, unit_type, file_info["out"][1])
+        for file_info in files
+        for sample in get_samples(samples)
+        for unit_type in get_unit_types(units, sample)
+    ]
+    input_files = [
+        "%s/%s_%s%s" % (file_info["in"][0], sample, unit_type, file_info["in"][1])
+        for file_info in files
+        for sample in get_samples(samples)
+        for unit_type in get_unit_types(units, sample)
+    ]
+    output_files += [
+        "results/dna/vcf/%s_%s_%s.vcf.gz" % (caller, sample, t)
+        for caller in ["mutect2", "vardict"]
+        for sample in get_samples(samples)
+        for t in get_unit_types(units, sample)
+    ]
+    input_files += [
+        "snv_indels/%s/%s_%s.merged.vcf.gz" % (caller, sample, t)
+        for caller in ["mutect2", "vardict"]
+        for sample in get_samples(samples)
+        for t in get_unit_types(units, sample)
+    ]
+    output_files += [
+        "results/dna/qc/%s_%s_%s_fastqc.html" % (sample, t, read)
+        for read in ["fastq1", "fastq2"]
+        for sample in get_samples(samples)
+        for t in get_unit_types(units, sample)
+    ]
+    input_files += [
+        "qc/fastqc/%s_%s_%s_fastqc.html" % (sample, t, read)
+        for read in ["fastq1", "fastq2"]
+        for sample in get_samples(samples)
+        for t in get_unit_types(units, sample)
+    ]
     output_files.append("results/dna/qc/MultiQC.html")
+    input_files.append("qc/multiqc/MultiQC.html")
+    return input_files, output_files
+
+
+def compile_output_list(wildcards):
     return output_files
+
+
+input_files, output_files = compile_result_file_list()
